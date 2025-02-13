@@ -3,8 +3,7 @@ import spacy
 
 app = Flask(__name__)
 
-# Load your NLP model
-nlp = spacy.load("en_core_web_md")  # Make sure the model is downloaded
+model_nlp = spacy.load("en_core_web_md")  
 
 # Sample dataset
 documents = {
@@ -22,14 +21,14 @@ def home():
     return render_template('index.html', result=result)
 
 def semantic_search(query):
-    query_vector = nlp(query).vector
+    query_vector = model_nlp(query).vector
     similarities = {}
     for doc_id, text in documents.items():
-        doc_vector = nlp(text).vector
-        similarity = query_vector @ doc_vector  # Dot product for similarity
+        doc_vector = model_nlp(text).vector
+        similarity = query_vector @ doc_vector  
         similarities[doc_id] = similarity
 
-    # Get the document with the highest similarity
+    # For Getting the document with the highest similarity for output
     best_match = max(similarities, key=similarities.get)
     return documents[best_match]
 
